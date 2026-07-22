@@ -508,3 +508,55 @@ body {
   .login-visual { padding: 28px 24px; }
   .login-form-panel { padding: 32px 28px; }
 }
+
+/* ===== Icon Menu Grid (หน้าหลัก quick menu) ===== */
+.icon-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 20px;
+  max-width: 520px;
+  margin-bottom: 8px;
+}
+
+.icon-menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  text-align: center;
+}
+
+.icon-circle {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--navy);
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.icon-circle svg { width: 26px; height: 26px; }
+
+.icon-menu-item:hover .icon-circle {
+  border-color: var(--navy);
+  transform: translateY(-3px);
+}
+
+.icon-menu-item.active .icon-circle {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+
+.icon-menu-item span {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.icon-menu-item.active span { color: var(--navy); font-weight: 600; }
