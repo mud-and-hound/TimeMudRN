@@ -67,3 +67,48 @@ async function apiFetch(path, options = {}) {
 
   return res;
 }
+
+/* ==================================================
+   Mobile Nav — ปุ่มแฮมเบอร์เกอร์ + toggle sidebar (จอ ≤768px)
+   ทำงานอัตโนมัติทุกหน้าที่มี .sidebar (ข้าม index.html เพราะไม่มี sidebar)
+================================================== */
+(function initMobileNav() {
+  const sidebar = document.querySelector('.sidebar');
+  if (!sidebar) return;
+
+  const btn = document.createElement('button');
+  btn.className = 'mobile-menu-btn';
+  btn.setAttribute('aria-label', 'เปิดเมนู');
+  btn.innerHTML = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  `;
+
+  const backdrop = document.createElement('div');
+  backdrop.className = 'sidebar-backdrop';
+
+  document.body.appendChild(btn);
+  document.body.appendChild(backdrop);
+
+  function openSidebar() {
+    sidebar.classList.add('open');
+    backdrop.classList.add('open');
+  }
+
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('open');
+  }
+
+  btn.addEventListener('click', () => {
+    sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+  });
+
+  backdrop.addEventListener('click', closeSidebar);
+
+  /* ปิดเมนูอัตโนมัติเมื่อกดลิงก์ใน sidebar (กันเมนูค้างเปิดตอนเปลี่ยนหน้าบนจอเล็ก) */
+  sidebar.querySelectorAll('.nav-item').forEach((link) => {
+    link.addEventListener('click', closeSidebar);
+  });
+})();
