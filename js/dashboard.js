@@ -20,6 +20,11 @@ function todayStr() {
 }
 
 async function loadAll() {
+  gsap.fromTo('.icon-menu-item',
+    { opacity: 0, y: 6 },
+    { opacity: 1, y: 0, duration: 0.3, stagger: 0.05, ease: 'power2.out' }
+  );
+
   try {
     const today = todayStr();
 
