@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ประวัติเข้า-ออก · TimeMud Admin</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <h2>TIMEMUD ADMIN</h2>
+      <span id="user-branch">Mud &amp; Hound</span>
+    </div>
+    <nav>
+      <a href="dashboard.html" class="nav-item">แดชบอร์ด</a>
+      <a href="attendance.html" class="nav-item active">ประวัติเข้า-ออก</a>
+      <a href="branches.html" class="nav-item">จัดการสาขา</a>
+      <a href="beacons.html" class="nav-item">จัดการ Beacon</a>
+    </nav>
+    <div class="sidebar-logout">
+      <button class="btn-secondary" style="width:100%" onclick="logout()">ออกจากระบบ</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <h1>ประวัติเข้า-ออก</h1>
+        <p>รายการ Clock-in / Clock-out ทุกคน ทุกสาขา</p>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <div class="field">
+        <label>สาขา</label>
+        <select id="f-branch">
+          <option value="">ทุกสาขา</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>วันที่เริ่ม</label>
+        <input type="date" id="f-from">
+      </div>
+      <div class="field">
+        <label>วันที่สิ้นสุด</label>
+        <input type="date" id="f-to">
+      </div>
+      <button class="btn-add" onclick="loadAttendance()">ค้นหา</button>
+    </div>
+
+    <div class="result-count" id="result-count"></div>
+    <div id="table-wrap">
+      <div class="empty-state">กำลังโหลดข้อมูล...</div>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/attendance.js"></script>
+</body>
+</html>
