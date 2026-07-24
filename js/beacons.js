@@ -2,7 +2,7 @@
    beacons.js — TimeMud Admin
 ================================================== */
 
-if (!requireAdmin()) { /* redirect handled inside */ }
+if (!requireAccess('can_manage_devices')) { /* redirect handled inside */ }
 
 const user = getCurrentUser();
 if (user) document.getElementById('user-branch').textContent = user.full_name;
