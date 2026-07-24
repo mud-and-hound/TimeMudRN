@@ -3,7 +3,7 @@
    หน้าประวัติเข้า-ออก — filter สาขา + ช่วงวันที่
 ================================================== */
 
-if (!requireAdmin()) { /* redirect handled inside */ }
+if (!requireAccess('can_manage_users')) { /* redirect handled inside */ }
 
 const user = getCurrentUser();
 if (user) document.getElementById('user-branch').textContent = user.full_name;
