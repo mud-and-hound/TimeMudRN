@@ -15,10 +15,11 @@
       <span id="user-branch">Mud &amp; Hound</span>
     </div>
     <nav>
-      <a href="dashboard.html" class="nav-item active">แดชบอร์ด</a>
-      <a href="attendance.html" class="nav-item">ประวัติเข้า-ออก</a>
-      <a href="branches.html" class="nav-item">จัดการสาขา</a>
-      <a href="beacons.html" class="nav-item">จัดการ Beacon</a>
+      <a href="dashboard.html" class="nav-item active" data-requires="super_admin">แดชบอร์ด</a>
+      <a href="attendance.html" class="nav-item" data-requires="can_manage_users">ประวัติเข้า-ออก</a>
+      <a href="branches.html" class="nav-item" data-requires="super_admin">จัดการสาขา</a>
+      <a href="beacons.html" class="nav-item" data-requires="can_manage_devices">จัดการ Beacon</a>
+      <a href="permissions.html" class="nav-item" data-requires="super_admin">จัดการสิทธิ์</a>
     </nav>
     <div class="sidebar-logout">
       <button class="btn-secondary" style="width:100%" onclick="logout()">ออกจากระบบ</button>
