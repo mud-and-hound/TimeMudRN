@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ยังไม่มีสิทธิ์ · TimeMud Admin</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="login-wrap">
+  <div class="login-split" id="card" style="max-width:520px;">
+    <div class="login-visual">
+      <div class="brand-mark">TM</div>
+      <h1>TIMEMUD ADMIN</h1>
+      <p>Time Attendance System<br>Mud &amp; Hound Public Company Limited</p>
+    </div>
+    <div class="login-form-panel">
+      <h2>ยังไม่ได้รับสิทธิ์การใช้งาน</h2>
+      <p class="login-sub" style="line-height:1.7;">
+        บัญชีของคุณยังไม่ถูกเปิดสิทธิ์เข้าถึงเมนูใดเลย<br>
+        กรุณาติดต่อ Super User เพื่อขอเปิดสิทธิ์
+      </p>
+      <button class="btn-primary" onclick="logout()" style="margin-top:20px;">ออกจากระบบ</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script>
+gsap.to('#card', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
+
+/* กันเข้าหน้านี้ตรงๆ โดยไม่ login, และกันคนที่มีสิทธิ์แล้วมาหลงอยู่หน้านี้ */
+const token = getToken();
+const user = getCurrentUser();
+if (!token || !user) {
+  window.location.href = 'index.html';
+} else if (hasAccess('super_admin') || hasAccess('can_manage_users') || hasAccess('can_manage_devices')) {
+  window.location.href = getLandingPage();
+}
+</script>
+</body>
+</html>
