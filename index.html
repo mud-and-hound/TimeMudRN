@@ -44,9 +44,9 @@ const form = document.getElementById('login-form');
 const errorBox = document.getElementById('error');
 const submitBtn = document.getElementById('submit-btn');
 
-/* ถ้า login อยู่แล้ว เด้งเข้าหน้าหลักเลย */
-if (getToken() && getCurrentUser()?.role === 'admin') {
-  window.location.href = 'dashboard.html';
+/* ถ้า login อยู่แล้ว เด้งเข้าหน้าที่เหมาะสมตามสิทธิ์ */
+if (getToken() && getCurrentUser()) {
+  window.location.href = getLandingPage();
 }
 
 form.addEventListener('submit', async (e) => {
@@ -60,7 +60,7 @@ form.addEventListener('submit', async (e) => {
       document.getElementById('username').value.trim(),
       document.getElementById('password').value
     );
-    window.location.href = 'dashboard.html';
+    window.location.href = getLandingPage();
   } catch (err) {
     errorBox.textContent = err.message;
     errorBox.style.display = 'block';
