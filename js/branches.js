@@ -2,7 +2,7 @@
    branches.js — TimeMud Admin
 ================================================== */
 
-if (!requireAdmin()) { /* redirect handled inside */ }
+if (!requireAccess('super_admin')) { /* redirect handled inside */ }
 
 const user = getCurrentUser();
 if (user) document.getElementById('user-branch').textContent = user.full_name;
