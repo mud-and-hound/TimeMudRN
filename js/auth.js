@@ -1,6 +1,6 @@
 /* ==================================================
    auth.js — TimeMud Admin
-   Login / Token / Route Guard
+   Login / Token / Route Guard / Permissions
 ================================================== */
 
 async function login(username, password) {
@@ -13,7 +13,7 @@ async function login(username, password) {
   const data = await res.json();
   if (!res.ok) throw new Error(data.detail || 'เข้าสู่ระบบไม่สำเร็จ');
 
-  if (data.user.role !== 'admin') {
+  if (data.user.role !== 'admin' && data.user.role !== 'super_admin') {
     throw new Error('บัญชีนี้ไม่มีสิทธิ์เข้าหน้าผู้ดูแลระบบ');
   }
 
@@ -37,15 +37,50 @@ function logout() {
   window.location.href = 'index.html';
 }
 
-/* เรียกทุกหน้ายกเว้น index.html — เด้งกลับ login ถ้าไม่มี token */
-function requireAdmin() {
+/* ==================================================
+   เช็คสิทธิ์ — คืนค่า true/false ไม่ redirect
+   key ที่รับ: 'super_admin' (ต้องเป็น super_admin เป๊ะ)
+              'can_manage_users' / 'can_manage_devices' (super_admin ผ่านเสมอ, admin ต้องถูกเปิดสิทธิ์)
+================================================== */
+function hasAccess(key) {
+  const user = getCurrentUser();
+  if (!user) return false;
+  if (user.role === 'super_admin') return true;
+  if (key === 'super_admin') return false; // ต้องเป็น super_admin เท่านั้น ไม่มีทางลัด
+  if (user.role === 'admin') return !!(user.permissions && user.permissions[key]);
+  return false;
+}
+
+/* เรียกทุกหน้าที่ต้องการสิทธิ์เฉพาะ — เด้งกลับ login ถ้าไม่มี token, เด้งไปหน้าแรกที่เข้าได้ถ้าไม่มีสิทธิ์หน้านี้ */
+function requireAccess(key) {
   const token = getToken();
   const user = getCurrentUser();
-  if (!token || !user || user.role !== 'admin') {
+  if (!token || !user) {
     window.location.href = 'index.html';
     return false;
   }
+  if (!hasAccess(key)) {
+    window.location.href = getLandingPage();
+    return false;
+  }
   return true;
+}
+
+/* หน้าแรกที่ควรเด้งไปหลัง login หรือหลังโดนเด้งเพราะไม่มีสิทธิ์หน้าที่พยายามเข้า
+   เรียงตามลำดับความสำคัญ: dashboard (super_admin) > attendance (can_manage_users) > beacons (can_manage_devices) */
+function getLandingPage() {
+  if (hasAccess('super_admin')) return 'dashboard.html';
+  if (hasAccess('can_manage_users')) return 'attendance.html';
+  if (hasAccess('can_manage_devices')) return 'beacons.html';
+  return 'no-access.html';
+}
+
+/* ซ่อนเมนู sidebar ที่ผู้ใช้ไม่มีสิทธิ์เข้า — ใส่ data-requires="..." ไว้ที่ <a class="nav-item"> แต่ละอัน */
+function applySidebarVisibility() {
+  document.querySelectorAll('.nav-item[data-requires]').forEach((el) => {
+    const key = el.getAttribute('data-requires');
+    if (!hasAccess(key)) el.style.display = 'none';
+  });
 }
 
 /* fetch แนบ token อัตโนมัติ */
@@ -107,8 +142,12 @@ async function apiFetch(path, options = {}) {
 
   backdrop.addEventListener('click', closeSidebar);
 
-  /* ปิดเมนูอัตโนมัติเมื่อกดลิงก์ใน sidebar (กันเมนูค้างเปิดตอนเปลี่ยนหน้าบนจอเล็ก) */
   sidebar.querySelectorAll('.nav-item').forEach((link) => {
     link.addEventListener('click', closeSidebar);
   });
 })();
+
+/* ซ่อนเมนูที่ไม่มีสิทธิ์อัตโนมัติทุกหน้าที่มี sidebar (รันหลัง DOM พร้อม) */
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.querySelector('.sidebar')) applySidebarVisibility();
+});
